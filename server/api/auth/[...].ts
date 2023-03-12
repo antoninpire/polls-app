@@ -2,6 +2,7 @@
 import { NuxtAuthHandler } from '#auth';
 import { compare } from 'bcrypt';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import { prisma } from '../../lib/prisma';
 
 type Credentials = {
   csrfToken: string;
