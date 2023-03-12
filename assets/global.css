@@ -1,0 +1,22 @@
+@font-face {
+  font-family: "climate";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("~/assets/fonts/climate.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "montserrat";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("~/assets/fonts/montserrat.ttf") format("truetype");
+}
+
+* {
+  font-family: "montserrat";
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}

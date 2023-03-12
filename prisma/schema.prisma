@@ -1,0 +1,85 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model User {
+  id String @id @default(cuid())
+  username String @unique @db.VarChar(128)
+  password String @db.VarChar(255)
+
+  polls Poll[]
+  votes PollVote[]
+  comments PollComment[]
+
+  createdAt DateTime @default(now())
+}
+
+model Poll {
+  id String @id @default(cuid())
+
+  endsAt DateTime?
+  question String @db.VarChar(2048)
+
+  userId String
+  user User @relation(fields: [userId], references: [id])
+
+  options PollOption[]
+  comments PollComment[]
+
+  createdAt DateTime @default(now())
+  @@index([userId])
+}
+
+model PollVote {
+  id String @id @default(cuid())
+
+  optionId String
+  option PollOption @relation(fields: [optionId], references: [id])
+
+  userId String
+  user User @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, optionId])
+  @@index([userId])
+  @@index([optionId])
+}
+
+model PollOption {
+  id String @id @default(cuid())
+
+  value String @db.VarChar(255)
+
+  pollId String
+  poll Poll @relation(fields: [pollId], references: [id])
+
+  votes PollVote[]
+
+  @@index([pollId])
+}
+
+model PollComment {
+  id String @id @default(cuid())
+
+  value String @db.Text
+
+  pollId String
+  poll Poll @relation(fields: [pollId], references: [id])
+
+  userId String
+  user User @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  @@index([pollId])
+  @@index([userId])
+}
