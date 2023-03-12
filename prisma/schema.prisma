@@ -26,8 +26,8 @@ model User {
 model Poll {
   id String @id @default(cuid())
 
-  endsAt DateTime?
-  question String @db.VarChar(2048)
+  endsAt DateTime
+  question String @db.VarChar(244)
 
   userId String
   user User @relation(fields: [userId], references: [id])
@@ -58,7 +58,7 @@ model PollVote {
 model PollOption {
   id String @id @default(cuid())
 
-  value String @db.VarChar(255)
+  value String @db.VarChar(25)
 
   pollId String
   poll Poll @relation(fields: [pollId], references: [id])
