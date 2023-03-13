@@ -1,15 +1,23 @@
 <template>
-  <div class="w-[27rem] border border-gray-600 px-3 py-2 rounded">
-    <p v-if="hasVoted" class="font-semibold text-gray-400 text-xs mb-2">
-      {{ poll.amountOfVotes }} votes
-    </p>
-    <p v-else class="font-semibold text-gray-400 mb-2 text-xs">
-      Ends on {{ poll.endsAt.toLocaleDateString() }} at {{ props.poll.endsAt.toLocaleTimeString() }}
-    </p>
+  <div class="w-[27rem] border border-gray-600 px-3 py-2 rounded hover:cursor-pointer">
+    <div class="flex items-center justify-between">
+      <p v-if="hasVoted" class="font-semibold text-gray-400 text-xs mb-2">
+        {{ poll.amountOfVotes }} votes
+      </p>
+      <p v-else class="font-semibold text-gray-400 mb-2 text-xs">
+        Ends on {{ poll.endsAt.toLocaleDateString() }} at {{ poll.endsAt.toLocaleTimeString() }}
+      </p>
+      <NuxtLink :to="`/polls/${poll.id}`">
+        <p class="text-primary uppercase hover:cursor-pointer hover:bg-transparent/10 rounded py-1 px-3">
+          see
+        </p>
+      </NuxtLink>
+    </div>
+
     <h4 class="text-white font-semibold text-lg">
       {{ poll.question }}
     </h4>
-    <div v-if="hasVoted || props.poll.endsAt.getTime() < now.getTime()" class="flex flex-col px-4 py-4 gap-2">
+    <div v-if="hasVoted || poll.endsAt.getTime() < now.getTime()" class="flex flex-col px-4 py-4 gap-2">
       <div v-for="option in poll.options" :key="option.id" class="relative overflow-hidden rounded-lg p-2 text-gray-200 justify-between flex">
         <div class="absolute top-0 left-0 w-full h-full bg-gray-700" :style="`width: ${Math.round(option._count.votes * 100 / poll.amountOfVotes)}%;`" />
 

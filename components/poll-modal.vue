@@ -30,11 +30,10 @@
               class="w-full max-w-md transform overflow-hidden rounded-2xl bg-secondary p-6 text-left align-middle shadow-xl transition-all"
             >
               <DialogTitle
-                v-if="props.title"
                 as="h3"
                 class="text-2xl font-bold leading-6 text-white"
               >
-                {{ props.title }}
+                Create a Poll
               </DialogTitle>
               <form @submit.prevent="onCreateClick">
                 <div class="mt-5 text-gray-400 flex flex-col gap-4">
@@ -99,7 +98,7 @@
                 </div>
 
                 <div class="mt-6 flex items-center justify-center gap-3">
-                  <Btn variant="default" class="font-semibold" @click="props.onClose">
+                  <Btn variant="default" class="font-semibold" @click.prevent="props.onClose">
                     Cancel
                   </Btn>
                   <Btn variant="default" class="font-semibold" :is-loading="form.pending">
@@ -131,23 +130,7 @@ const { $client, $toast } = useNuxtApp()
 
 const { refresh } = $client.poll.getAll.useQuery(undefined, { lazy: true, immediate: false })
 
-const props = defineProps({
-  isOpen: {
-    type: Boolean,
-    required: false,
-    default: false
-  },
-  onClose: {
-    type: Function,
-    required: false,
-    default: () => {}
-  },
-  title: {
-    type: String,
-    required: false,
-    default: undefined
-  },
-})
+const props = defineProps<{isOpen: boolean, onClose:() => void}>()
 
 const initialState = {
   data: {
@@ -188,7 +171,19 @@ async function onCreateClick () {
       ...form.data
     });
     // Reset form
-    Object.assign(form, initialState);
+    form.amountOfOptionsToShow = 2;
+    form.pending = false;
+    form.error = '';
+    form.data = {
+      days: '1',
+      hours: '0',
+      minutes: '0',
+      option1: '',
+      option2: '',
+      option3: '',
+      option4: '',
+      question: '',
+    }
     props.onClose();
 
     $toast.success(`Poll created with success !`)

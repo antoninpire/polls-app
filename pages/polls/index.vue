@@ -2,7 +2,8 @@
 // eslint-disable-next-line import/order
 import { RouterOutputs } from '~~/server/trpc/routers';
 import Btn from '../../components/btn.vue';
-import Modal from '../../components/modal.vue';
+import PollModal from '../../components/poll-modal.vue';
+import Poll from '../../components/poll.vue';
 
 const { $client } = useNuxtApp()
 
@@ -13,9 +14,18 @@ definePageMeta({
   layout: 'polls'
 })
 
+useHead({
+  title: 'Polls App - Polls',
+  meta: [{
+    name: 'description',
+    content: 'Polls page including all polls'
+  }]
+})
+
 defineComponent({
   Btn,
-  Modal
+  PollModal,
+  Poll
 })
 
 type Store = {
@@ -79,42 +89,16 @@ const polls = computed(() => {
           </Btn>
         </div>
       </div>
-      <div v-if="pending">
+      <div v-if="pending" class="text-white">
         Loading ...
       </div>
       <div v-else class="flex items-center flex-col gap-5 pt-10">
         <div v-for="poll in polls" :key="poll.id">
-          <!-- <p v-if="votedPolls?.find(p => p.id === poll.id) || poll.endsAt.getTime() < now.getTime()" class="font-semibold text-gray-400 text-xs mb-2">
-            {{ poll.amountOfVotes }} votes
-          </p>
-          <p v-else class="font-semibold text-gray-400 mb-2 text-xs">
-            Ends on {{ poll.endsAt.toLocaleDateString() }} at {{ poll.endsAt.toLocaleTimeString() }}
-          </p>
-          <h4 class="text-white font-semibold text-lg">
-            {{ poll.question }}
-          </h4>
-          <div v-if="votedPolls?.find(p => p.id === poll.id) || poll.endsAt.getTime() < now.getTime()" class="flex flex-col px-4 py-4 gap-2">
-            <div v-for="option in poll.options" :key="option.id" class="bg-gray-700 rounded-lg p-2 text-gray-200 hover:cursor-pointer hover:bg-gray-700/80 justify-between flex">
-              <p>{{ option.value }}</p>
-              <p class="text-sm">
-                {{ Math.round(option._count.votes * 100 / poll.amountOfVotes) }}% ({{ option._count.votes }} vote(s))
-              </p>
-            </div>
-          </div>
-          <div v-else class="flex flex-col px-4 pt-4 pb-1 gap-2">
-            <div v-for="option in poll.options" :key="option.id" class="rounded-lg text-gray-200 flex items-center gap-2">
-              <input :id="`option-${option.id}`" :name="poll.id" type="radio">
-              <label :for="`option-${option.id}`">{{ option.value }}</label>
-            </div>
-            <div class="flex items-center justify-center">
-              <Btn>Vote</Btn>
-            </div>
-          </div> -->
           <Poll :current-user-has-voted="!!votedPolls?.find(p => p.id === poll.id)" :poll="poll" />
         </div>
       </div>
     </div>
 
-    <Modal title="Create a Poll" :is-open="store.isOpen" :on-close="onClose" />
+    <PollModal title="Create a Poll" :is-open="store.isOpen" :on-close="onClose" />
   </div>
 </template>

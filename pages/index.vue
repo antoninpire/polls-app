@@ -2,10 +2,14 @@
 definePageMeta({
   middleware: 'public'
 })
-// const { $client } = useNuxtApp()
 
-// const hello = await $client.hello2.useQuery()
-
+useHead({
+  title: 'Polls App',
+  meta: [{
+    name: 'description',
+    content: 'A simple polls app using Vue, Nuxt, TRPC and Tailwind'
+  }]
+})
 </script>
 
 <template>

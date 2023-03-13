@@ -94,4 +94,56 @@ export const pollRouter = router({
 
         return ret;
         }),
+        getById: protectedProcedure.input(z.object({ id: z.string().cuid() }))
+        .query(async ({ ctx: { prisma }, input: { id } }) => {
+            const poll = await prisma.poll.findUnique({
+                where: {
+                    id
+                },
+                include: {
+                    comments: {
+                        select: {
+                            id: true,
+                            user: {
+                                select: {
+                                    username: true
+                                }
+                            },
+                            value: true,
+                            createdAt: true
+                        },
+                        orderBy: {
+                            createdAt: 'desc'
+                        }
+                    },
+                    _count: {
+                        select: {
+                           comments: true,
+                        }
+                   },
+                   options: {
+                       select: {
+                           id: true,
+                           value: true,
+                           _count: {
+                               select: {
+                                    votes: true
+                               }
+                           },
+                           votes: {
+                               select: {
+                                   userId: true,
+                                   id: true
+                               }
+                           }
+                       }
+                   },
+                },
+            })
+
+            return {
+                ...poll,
+                amountOfVotes: poll?.options.reduce((count, option) => count + option._count.votes, 0) ?? 0
+            }
+        })
 })

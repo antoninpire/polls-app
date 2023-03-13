@@ -3,6 +3,14 @@ definePageMeta({
   middleware: 'public'
 })
 
+useHead({
+  title: 'Polls App - Signup',
+  meta: [{
+    name: 'description',
+    content: 'Signup page of the Polls App'
+  }]
+})
+
 const { $client } = useNuxtApp()
 
 const { signIn } = useSession()

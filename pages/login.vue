@@ -3,6 +3,14 @@ definePageMeta({
   middleware: 'public'
 })
 
+useHead({
+  title: 'Polls App - LOGIN',
+  meta: [{
+    name: 'description',
+    content: 'Login Page of the Polls App'
+  }]
+})
+
 const { signIn } = useSession()
 
 const form = reactive({
@@ -17,7 +25,6 @@ async function onLoginClick () {
   try {
     form.error = false;
     form.pending = true;
-    // await login(form.data.email, form.data.password, form.data.rememberMe)
     await signIn('credentials', {
       callbackUrl: '/polls',
       username: form.data.username,
