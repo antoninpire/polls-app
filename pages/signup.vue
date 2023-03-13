@@ -48,7 +48,7 @@ async function onSignupClick () {
 
 <template>
   <div class="w-screen h-screen flex justify-center items-center bg-background">
-    <div class="rounded p-6 flex flex-col gap-2 border-gray-600 border-[0.25px]">
+    <div class="rounded px-6 pt-6 pb-3 flex flex-col gap-2 border-gray-600 border-[0.25px]">
       <h3 class="text-2xl font-semibold text-white">
         SignUp
       </h3>
@@ -67,6 +67,11 @@ async function onSignupClick () {
         <button form="login-form" :disabled="form.pending" type="submit" class="rounded-3xl px-4 py-2 bg-primary text-text hover:bg-primary/90">
           {{ form.pending ? 'Loading...' : 'Create Account' }}
         </button>
+      </div>
+      <div class="flex mt-1 justify-center items-center">
+        <NuxtLink to="/login">
+          <span class="text-sm text-primary/75 hover:text-primary">Have an Account? Login !</span>
+        </NuxtLink>
       </div>
     </div>
   </div>

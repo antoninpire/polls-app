@@ -11,7 +11,7 @@
     </h4>
     <div v-if="hasVoted || (poll?.endsAt?.getTime() ?? 0) < now.getTime()" class="flex flex-col px-4 py-4 gap-2">
       <div v-for="option in poll.options" :key="option.id" class="relative overflow-hidden rounded-lg p-2 text-gray-200 justify-between flex">
-        <div class="absolute top-0 left-0 w-full h-full bg-gray-700" :style="`width: ${Math.round(option._count.votes * 100 / poll.amountOfVotes)}%;`" />
+        <div :class="`absolute top-0 left-0 w-full h-full ${optionsWithMostVotes.includes(option.id) ? 'bg-sky-800' : 'bg-gray-700'}`" :style="`width: ${Math.round(option._count.votes * 100 / poll.amountOfVotes)}%;`" />
 
         <p class="z-10">
           {{ option.value }}
@@ -79,4 +79,16 @@
           }
           } catch {}
       }
+
+      const optionsWithMostVotes = computed(() => {
+      let max = 0;
+      (poll.value?.options ?? []).forEach((option) => {
+        const percentage = Math.round(option._count.votes * 100 / poll.value.amountOfVotes);
+        if (percentage >= max) { max = percentage }
+      })
+      return (poll.value?.options ?? []).filter((option) => {
+        const percentage = Math.round(option._count.votes * 100 / poll.value.amountOfVotes);
+        return percentage === max
+      }).map(option => option.id)
+})
   </script>
